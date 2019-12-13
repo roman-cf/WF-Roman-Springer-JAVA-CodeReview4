@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -29,31 +30,29 @@ public class Main extends Application {
         primaryStage.setTitle("CodeReview Java 4");
         // Objekte bauen
         Product product1 = new Product("Pfeffer",
-                1,"Stück",
+                "1 Stück",
                 "Schwarzer Pfeffer verleiht Ihren Speisen eine pikante Schärfe, besonders wenn er länger mitgekocht wird. ",
                 "pfeffer__600x600.jpg",
                 3.49,
                 2.79);
         Product product2 = new Product("Schafmilchkäse",
-                200, "Gramm Packung",
+                "200 Gramm Packung",
                 "Hier gibt es keine Beschreibung, weil unsere Handelskette kennst sich nur bedingt damit aus, wie man eine Werbebeschreibung schreibt.",
                 "cheese_salakis__600x600.jpg",
                 2.59,
                 1.99);
         Product product3 = new Product("Vöslauer",
-                1.5, "Liter Flasche",
+                "1.5 Liter Flasche",
                 "Spritziges Vöslauer Mineralwasser.",
                 "voslauer__600x600.jpg",
                 0.75,
                 0.49);
         Product product4 = new Product("Zucker",
-                500, "Gramm Packet",
+                "500 Gramm Packet",
                 "Natürliches Gelieren wird durch Apfelpektin unterstützt, welches im richtigen Verhältnis mit Zitronensäure und Kristallzucker abgemischt wurde.",
                 "zucker__600x600.jpg",
                 1.39,
                 0.89);
-
-
 
         Label lblHeadlineProdDetail = new Label("Product Details");
             lblHeadlineProdDetail.setStyle("-fx-font-weight: bold");
@@ -81,34 +80,74 @@ public class Main extends Application {
         lblProductDesc.setPrefWidth(250);
         lblProductDesc.setWrapText(true);
 
+        Button btnUpdate = new Button("Update");
+        Button btnClear = new Button("Clear fields");
+        Button btnAdd = new Button("Add");
+        Button btnDelete = new Button("Delete");
+        Button btnFile = new Button("Create file");
+
         InputStream input = this.getClass().getResourceAsStream("/images/default.png" );
-        Image imageBox = new Image(input);
-        ImageView imageViewBox = new  ImageView(imageBox);
+        Image image = new Image(input);
+        ImageView imageViewBox = new  ImageView(image);
         imageViewBox.setFitHeight(200);
         imageViewBox.setFitWidth(200);
+
 
 // Elemente zusammenbauen
         ObservableList<Product> productItems = FXCollections.observableArrayList(product1,product2,product3,product4);
         ListView<Product> productList = new ListView<>();
             productList.getItems().addAll(productItems);
             productList.setMinWidth(340);
-// Actions
+// Actions ------------------------------------------------------
         productList.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
             int selIdx = productList.getSelectionModel().getSelectedIndex();
             if (selIdx!=-1){
                 txtName.setText(newValue.getProductName());
                 txtQuant.setText(newValue.getProductAmount()+" "+newValue.getProductAmountType());
-                txtOldPrice.setText(String.valueOf((newValue.getProductPriceOld()))+"€");
-                txtNewPrice.setText(String.valueOf((newValue.getProductPriceNew()))+"€");
+                txtOldPrice.setText(String.valueOf((newValue.getProductPriceOld())));
+                txtNewPrice.setText(String.valueOf((newValue.getProductPriceNew())));
                 lblProductDesc.setText(newValue.getProductDescription());
-                input.getClass().getResourceAsStream("/images/"+newValue.getProductPicPath().toString());
-                System.out.println(input.toString());
 
+                InputStream in = this.getClass().getResourceAsStream("/images/"+ newValue.getProductPicPath() );
+                Image imageNew = new Image(in);
+                imageViewBox.setImage(imageNew);
+
+                //System.out.println(input);
+                txtName.setDisable(true);
+                txtQuant.setDisable(true);
             }
         });
 
+        btnUpdate.setOnAction(actionEvent -> {
+            int selIdx = productList.getSelectionModel().getSelectedIndex();
+            if (selIdx != -1){
+                double oldprice = Double.parseDouble(txtOldPrice.getText());
+                productList.getItems().get(selIdx).setProductPriceOld(oldprice);
+                productList.refresh();
+                double newprice = Double.parseDouble(txtNewPrice.getText());
+                productList.getItems().get(selIdx).setProductPriceNew(newprice);
+                productList.refresh();
+            }
+        });
 
-// Scene Zusammenbauen
+        btnClear.setOnAction(actionEvent -> {
+            txtName.setText("");
+            txtName.setDisable(false);
+            txtQuant.setText("");
+            txtQuant.setDisable(false);
+            txtOldPrice.setText("");
+            txtNewPrice.setText("");
+            lblProductDesc.setText("");
+        });
+
+        btnAdd.setOnAction(actionEvent -> {
+            double oldP = Double.parseDouble(txtOldPrice.getText());
+            double newP = Double.parseDouble(txtNewPrice.getText());
+            productList.getItems().add(new Product( txtName.getText(), txtQuant.getText(),"Beschreibung folgt","default.png", oldP,newP));
+        });
+
+
+// Scene Zusammenbauen ---------------------------------------------------------------------------
         HBox namenBox = new HBox(lblProductName,txtName);
             namenBox.setPadding(new Insets(10,10,10,10));
         HBox quantBox = new HBox(lblProductQuant,txtQuant);
@@ -118,10 +157,11 @@ public class Main extends Application {
         HBox newPrBox = new HBox(lblNewPrices,txtNewPrice);
             newPrBox.setPadding(new Insets(10,10,10,10));
 
+        HBox btnBox = new HBox(btnUpdate,btnClear,btnAdd);
         VBox productDetails = new VBox(lblHeadlineProdDetail,namenBox,quantBox,oldPrBox,newPrBox,imageViewBox,lblDescHead,lblProductDesc);
             productDetails.setMinWidth(450);
             productDetails.setPadding(new Insets(10,10,10,10));
-        VBox productListBox = new VBox(lblHeadlineProdList,productList);
+        VBox productListBox = new VBox(lblHeadlineProdList,productList,btnBox);
         HBox mainBox = new HBox(productDetails,productListBox);
         Scene scene = new Scene(mainBox, 800, 600);
         primaryStage.setScene(scene);

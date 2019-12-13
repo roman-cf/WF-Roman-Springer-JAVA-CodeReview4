@@ -2,17 +2,17 @@ package sample;
 
 public class Product {
     String productName;
-    double productAmount;
+    String productAmount;
     String productAmountType;
     String productDescription;
     String productPicPath;
     double productPriceOld;
     double productPriceNew;
 
-    public Product(String productName, double productAmount, String productAmountType, String productDescription, String productPicPath, double productPriceOld, double productPriceNew) {
+    public Product(String productName, String productAmount,  String productDescription, String productPicPath, double productPriceOld, double productPriceNew) {
         this.productName = productName;
         this.productAmount = productAmount;
-        this.productAmountType = productAmountType;
+        //this.productAmountType = productAmountType;
         this.productDescription = productDescription;
         this.productPicPath = productPicPath;
         this.productPriceOld = productPriceOld;
@@ -21,7 +21,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return productAmount + " " +productName+ " "+productAmountType + " old: " + productPriceOld + "€ new: " + productPriceNew + "€.";
+        return productAmount + " " +productName+ " " + " old: " + productPriceOld + "€ new: " + productPriceNew + "€.";
     }
 
     public String getProductName() {
@@ -32,11 +32,11 @@ public class Product {
         this.productName = productName;
     }
 
-    public double getProductAmount() {
+    public String getProductAmount() {
         return productAmount;
     }
 
-    public void setProductAmount(double productAmount) {
+    public void setProductAmount(String productAmount) {
         this.productAmount = productAmount;
     }
 
