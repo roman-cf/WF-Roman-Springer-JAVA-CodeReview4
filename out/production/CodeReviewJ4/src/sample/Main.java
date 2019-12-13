@@ -101,7 +101,7 @@ public class Main extends Application {
                 txtOldPrice.setText(String.valueOf((newValue.getProductPriceOld()))+"€");
                 txtNewPrice.setText(String.valueOf((newValue.getProductPriceNew()))+"€");
                 lblProductDesc.setText(newValue.getProductDescription());
-                input.getClass().getResourceAsStream("/images/"+newValue.getProductPicPath());
+                input.getClass().getResourceAsStream("/images/"+newValue.getProductPicPath().toString());
                 System.out.println(input.toString());
 
             }
