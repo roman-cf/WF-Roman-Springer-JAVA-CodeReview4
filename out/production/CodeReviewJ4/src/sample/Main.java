@@ -159,8 +159,20 @@ public class Main extends Application {
         });
 
         btnFile.setOnAction(actionEvent -> {
-
-  
+            String report = "-------Report----------\n";
+            for (int i = 0; i < productList.getItems().size(); i++) {
+                String productAmount = productList.getItems().get(i).getProductAmount();
+                String productName = productList.getItems().get(i).getProductName();
+                report += productAmount + " " + productName + "\n";
+            }
+            try{
+                FileWriter fstream = new FileWriter("report.txt");
+                BufferedWriter output = new BufferedWriter(fstream);
+                output.write(report);
+                output.close();
+            }catch (Exception e){
+                System.err.println("Error: " + e.getMessage());
+            }
 
         });
 
