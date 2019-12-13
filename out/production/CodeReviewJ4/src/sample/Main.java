@@ -12,7 +12,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import java.io.InputStream;
+
+import java.io.*;
+
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -21,6 +23,11 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.awt.TextArea;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class Main extends Application {
 
@@ -103,7 +110,7 @@ public class Main extends Application {
             int selIdx = productList.getSelectionModel().getSelectedIndex();
             if (selIdx!=-1){
                 txtName.setText(newValue.getProductName());
-                txtQuant.setText(newValue.getProductAmount()+" "+newValue.getProductAmountType());
+                txtQuant.setText(newValue.getProductAmount()); // +" "+newValue.getProductAmountType()
                 txtOldPrice.setText(String.valueOf((newValue.getProductPriceOld())));
                 txtNewPrice.setText(String.valueOf((newValue.getProductPriceNew())));
                 lblProductDesc.setText(newValue.getProductDescription());
@@ -112,9 +119,9 @@ public class Main extends Application {
                 Image imageNew = new Image(in);
                 imageViewBox.setImage(imageNew);
 
-                //System.out.println(input);
                 txtName.setDisable(true);
                 txtQuant.setDisable(true);
+                btnUpdate.setDisable(false);
             }
         });
 
@@ -138,12 +145,23 @@ public class Main extends Application {
             txtOldPrice.setText("");
             txtNewPrice.setText("");
             lblProductDesc.setText("");
+            btnUpdate.setDisable(true);
         });
 
         btnAdd.setOnAction(actionEvent -> {
             double oldP = Double.parseDouble(txtOldPrice.getText());
             double newP = Double.parseDouble(txtNewPrice.getText());
-            productList.getItems().add(new Product( txtName.getText(), txtQuant.getText(),"Beschreibung folgt","default.png", oldP,newP));
+            if (txtName.getText()!="" && txtQuant.getText() != "" ){
+                productList.getItems().add(new Product( txtName.getText(), txtQuant.getText(),"Beschreibung folgt","default.png", oldP,newP));
+            }else{
+                txtName.setText("Bitte ausfüllen");
+            }
+        });
+
+        btnFile.setOnAction(actionEvent -> {
+
+  
+
         });
 
 
@@ -161,7 +179,7 @@ public class Main extends Application {
         VBox productDetails = new VBox(lblHeadlineProdDetail,namenBox,quantBox,oldPrBox,newPrBox,imageViewBox,lblDescHead,lblProductDesc);
             productDetails.setMinWidth(450);
             productDetails.setPadding(new Insets(10,10,10,10));
-        VBox productListBox = new VBox(lblHeadlineProdList,productList,btnBox);
+        VBox productListBox = new VBox(lblHeadlineProdList,productList,btnBox,btnFile);
         HBox mainBox = new HBox(productDetails,productListBox);
         Scene scene = new Scene(mainBox, 800, 600);
         primaryStage.setScene(scene);
