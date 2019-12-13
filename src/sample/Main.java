@@ -122,6 +122,7 @@ public class Main extends Application {
                 txtName.setDisable(true);
                 txtQuant.setDisable(true);
                 btnUpdate.setDisable(false);
+                btnAdd.setDisable(true);
             }
         });
 
@@ -146,6 +147,7 @@ public class Main extends Application {
             txtNewPrice.setText("");
             lblProductDesc.setText("");
             btnUpdate.setDisable(true);
+            btnAdd.setDisable(false);
         });
 
         btnAdd.setOnAction(actionEvent -> {
