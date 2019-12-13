@@ -21,7 +21,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return productAmount + " " +productName+ " " + " old: " + productPriceOld + "€ new: " + productPriceNew + "€.";
+        return productAmount + " " +productName+ " " + " old: " + productPriceOld + " € new: " + productPriceNew + " €.";
     }
 
     public String getProductName() {
