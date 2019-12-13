@@ -163,7 +163,9 @@ public class Main extends Application {
             for (int i = 0; i < productList.getItems().size(); i++) {
                 String productAmount = productList.getItems().get(i).getProductAmount();
                 String productName = productList.getItems().get(i).getProductName();
-                report += productAmount + " " + productName + "\n";
+                double oldPrice = productList.getItems().get(i).getProductPriceOld();
+                double newPrice = productList.getItems().get(i).getProductPriceNew();
+                report += productAmount + " " + productName + " old Price: "+oldPrice+" €, new Price: "+newPrice+" €\n";
             }
             try{
                 FileWriter fstream = new FileWriter("report.txt");
