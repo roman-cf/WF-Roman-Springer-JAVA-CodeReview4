@@ -103,7 +103,7 @@ public class Main extends Application {
             int selIdx = productList.getSelectionModel().getSelectedIndex();
             if (selIdx!=-1){
                 txtName.setText(newValue.getProductName());
-                txtQuant.setText(newValue.getProductAmount()+" "+newValue.getProductAmountType());
+                txtQuant.setText(newValue.getProductAmount()); // +" "+newValue.getProductAmountType()
                 txtOldPrice.setText(String.valueOf((newValue.getProductPriceOld())));
                 txtNewPrice.setText(String.valueOf((newValue.getProductPriceNew())));
                 lblProductDesc.setText(newValue.getProductDescription());
